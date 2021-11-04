@@ -4,6 +4,13 @@ trigger:
 - refs/heads/dev
 pr: ['dev']
 
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-latest'
+    windows:
+      imageName: 'windows-latest'
+        
 variables:
   solution: '**/*.sln'
   testProjects: "**/*Tests/*.csproj"
@@ -17,13 +24,6 @@ variables:
 
 stages:
 - stage: Build
-  strategy:
-    matrix:
-      linux:
-        imageName: 'ubuntu-latest'
-      windows:
-        imageName: 'windows-latest'
-
   pool:
     vmImage: $(imageName)
   jobs:
