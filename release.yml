@@ -17,8 +17,15 @@ variables:
 
 stages:
 - stage: Build
+  strategy:
+    matrix:
+      linux:
+        imageName: 'ubuntu-latest'
+      windows:
+        imageName: 'windows-latest'
+
   pool:
-      vmImage: 'windows-latest'
+    vmImage: $(imageName)
   jobs:
   - job: Build
     steps:
@@ -79,15 +86,8 @@ stages:
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
   jobs:
   - job: publish
-  strategy:
-    matrix:
-      linux:
-        imageName: 'ubuntu-latest'
-      windows:
-        imageName: 'windows-latest'
-      
     pool:
-        vmImage:  $(imageName)
+        vmImage:  'windows-latest'
     steps:
     - checkout: none #skip checking out the default repository resource
     - task: DownloadBuildArtifacts@0
